@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "/Users/msp5382/Library/Arduino15/packages/esp8266/tools/**",
+                "/Users/msp5382/Library/Arduino15/packages/esp8266/hardware/esp8266/2.5.2/**"
+            ],
+            "forcedInclude": []
+        }
+    ]
+}

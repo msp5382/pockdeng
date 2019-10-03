@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Pockdeng Service</title>
+
+    <script src="./jquery.js"></script>
+    <script src="./cards.js"></script>
+
+    <link href="./bootstrap.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <link href="./cards/cards.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div
+      class="nav"
+      style="padding:1rem;background-color:rgb(255, 151, 151);font-size:1.3rem;"
+    >
+      <div class="container">
+        <div class="row justify-content-between">
+          <b>Pockdeng</b>
+          <small id="serve" style="margin-top:3px">Not Connect to server</small>
+        </div>
+      </div>
+    </div>
+    <div class="container" style="padding-top:1rem">
+      <div class="row ">
+        <div class="col-lg-8 col-md-10 ">
+          <div class="text-center mt-5">
+            <h1 id="draw">Draw a card!</h1>
+            <h1 id="drawmore"></h1>
+            <h1 id="score"></h1>
+          </div>
+          <div class=" d-flex justify-content-center">
+            <div class="d-flex justify-content-between" id="cardcon"></div>
+          </div>
+        </div>
+        <div
+          class="col-lg-3 col-md-3 shadow mt-3  "
+          style="border-radius:10px; padding:1rem; height: 10rem; overflow-y: scroll"
+        >
+          <div style="position:fixed;background-color: rgb(255, 255, 255)">
+            Players :
+          </div>
+          <div class="d-flex justify-content-between" style="margin-top:1.7rem">
+              <div>เจ้ามือ (AI)</div>
+              <div id="jao" class="mr-5" style="padding-right:2rem;color:	#32CD32"> </div>
+          </div>
+          <div class="player-con" >
+              
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" style="display: block">
+      <div class="row justify-content-center" style="margin-top:40vh;">
+        <div
+          class="shadow"
+          style="max-width: 80%;width:26rem;border-radius:10px;padding:1rem;"
+        >
+          
+            Connect to Pockdeng Server :
+            <input
+              id="servip"
+              type="text"
+              placeholder="Server IP"
+              value="localhost"
+              class="mt-2 form-control"
+            />
+            <input
+            id="myname"
+              type="text"
+              placeholder="Your Name"
+              class="mt-2 form-control"
+            />
+            <input
+            id="myput"
+              type="text"
+              placeholder="ลงเงินเท่าไหร่"
+              class="mt-2 form-control"
+            />
+            <input
+              id="servcon"
+              type="button"
+              value="Connect!"
+              class="btn btn-warning mt-2 float-right"
+            />
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    simpleStorage = {}
+
+
+    final = function(data){
+      $('#jao').show()
+      
+      if(data.winner == "jaomue"){
+        if(data.paying != undefined){
+          $("#score").html(data.paying+"เด้ง เจ้ามือชนะ")
+          $.get(`http://localhost:3500/editscore?username=${simpleStorage.username}&edit=${parseInt(simpleStorage.put)*-1*parseInt(data.paying)}`,()=>{
+            $.get(`http://localhost:3500/editjao?edit=${parseInt(data.paying)*parseInt(simpleStorage.put)}`)
+          })
+        }else{
+          $("#score").html("เจ้ามือชนะ")
+          $.get(`http://localhost:3500/editscore?username=${simpleStorage.username}&edit=${0}`,()=>{
+            $.get(`http://localhost:3500/editjao?edit=${parseInt(simpleStorage.put)}`)
+          })
+        }
+      }else{
+        if(data.paying != undefined){
+          $("#score").html(data.paying+"เด้ง คุณชนะ")
+          $.get(`http://localhost:3500/editscore?username=${simpleStorage.username}&edit=${(parseInt(simpleStorage.put)*parseInt(data.paying))+parseInt(simpleStorage.put)}`,()=>{
+            $.get(`http://localhost:3500/editjao?edit=${-1*parseInt(data.paying)*parseInt(simpleStorage.put)}`)
+          })
+        }else{
+          $("#score").html("คุณมือชนะ")
+          $.get(`http://localhost:3500/editscore?username=${simpleStorage.username}&edit=${parseInt(simpleStorage.put)*2}`,()=>{
+            $.get(`http://localhost:3500/editjao?edit=${-1*parseInt(simpleStorage.put)}`)
+          })
+        }
+        
+      }
+    }
+Array.prototype.last = function() {
+    return this[this.length - 1];
+}
+
+    setInterval(()=>{
+      $.get(`http://localhost:3500/getjao`,(data)=>{
+        $('#jao').html(data+' point')
+      })
+      $.get(`http://localhost:3500/usersync`,(data)=>{
+        let htmlPrep = ``
+        
+        Object.keys(data).forEach((a)=>{
+          let color = '#32CD32'
+          if(parseInt(data[a]) <= 0){
+            color = '#DC143C'
+          }
+          htmlPrep += `
+          <div class="d-flex justify-content-between">
+          <div>${a} </div>
+          <div class="mr-5" style="padding-right:2rem;color:	${color}"> ${data[a]} point</div>
+          </div>`
+        })
+        $('.player-con').html(htmlPrep)
+      }
+    )}, 1000);
+
+    $('#servcon').on('click',() => {
+      simpleStorage.server = $('#servip').val()
+      simpleStorage.username = $('#myname').val()
+      simpleStorage.put = $('#myput').val()
+
+      $.get(`http://${$('#servip').val()}:3500/join?username=${$('#myname').val()}&put=${$('#myput').val()}`,()=>{
+        $('.modal').hide()
+        $('#serve').html("Connected to : "+$('#servip').val())
+      })
+    })
+
+
+      let gamecardScore = 0
+    $("#draw").on("click", () => {
+      $.get("http://localhost:3500/getcard", function(data) {
+        console.debug(data);
+        $("#cardcon").html(`
+        <img src="./cards/${data["1card"]}.svg" style="width: 45%" />
+        <img src="./cards/${data["2card"]}.svg" style="width: 45%" />
+        `);
+        gamecardScore = data['score']
+        $("#draw").html("");
+        $("#drawmore").html("<div id='drawmoreok' class='btn btn-warning mr-3'>Draw More</div><div id='nodrawmore' class='btn btn-warning'>Not Draw</div>");
+
+
+        $("#drawmoreok").on("click", () => {
+          $.get("http://localhost:3500/drawcard", function(data) {
+            console.debug(data);
+            $("#cardcon").append(`
+            <img src="./cards/${data["drawcard"]}.svg" style="width: 45%" />
+            `);
+            $("#drawmore").html("")
+            gamecardScore += data['score']
+            if(gamecardScore > 10){
+                gamecardScore = gamecardScore - 10
+            }
+            let cardprep = ''
+            cardprep += $('#cardcon').find( "img" )[0].src.split('/')[4].split('.')[0] + ','
+            cardprep += $('#cardcon').find( "img" )[1].src.split('/')[4].split('.')[0] + ','
+            if ($('#cardcon').find( "img" )[2].src.split('/')[4].split('.')[0] != undefined){
+              cardprep += $('#cardcon').find( "img" )[2].src.split('/')[4].split('.')[0]
+            }
+
+            $.get("http://localhost:3500/getscore?cards="+cardprep, function(data) {
+              console.log(data)
+              //$("#score").html(JSON.stringify(data))
+              final(data)
+            })
+            
+          });
+        });
+
+        $("#nodrawmore").on("click", () => {
+            $("#drawmore").html("")
+            if(gamecardScore > 10){
+                gamecardScore = gamecardScore - 10
+            }
+            let cardprep = ''
+            cardprep += $('#cardcon').find( "img" )[0].src.split('/')[4].split('.')[0] + ','
+            cardprep += $('#cardcon').find( "img" )[1].src.split('/')[4].split('.')[0]
+            $.get("http://localhost:3500/getscore?cards="+cardprep, function(data) {
+              console.log(data)
+              //$("#score").html(data)
+              final(data)
+            })
+            
+        });
+
+      });
+    });
+  </script>
+</html>
