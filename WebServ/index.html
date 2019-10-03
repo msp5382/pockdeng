@@ -119,7 +119,7 @@
             $.get(`http://localhost:3500/editjao?edit=${-1*parseInt(data.paying)*parseInt(simpleStorage.put)}`)
           })
         }else{
-          $("#score").html("คุณมือชนะ")
+          $("#score").html("คุณชนะ")
           $.get(`http://localhost:3500/editscore?username=${simpleStorage.username}&edit=${parseInt(simpleStorage.put)*2}`,()=>{
             $.get(`http://localhost:3500/editjao?edit=${-1*parseInt(simpleStorage.put)}`)
           })
