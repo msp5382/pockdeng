@@ -20,11 +20,3 @@ def Webserver():
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
         #print("serving at port", PORT)
         httpd.serve_forever()
-    
-
-    #sys.stderr.write("%s - - [%s] %s\n" %
-    #                 (self.address_string(),
-    #                  self.log_date_time_string(),
-    #                  format % args))
-    #                  
-#Webserver()

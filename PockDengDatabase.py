@@ -21,7 +21,7 @@ def readJao():
         return data
 
 def clearJao():
-    script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
+    script_dir = os.path.dirname(__file__) 
     rel_path = "WebServ/JaoDatabase.txt"
     abs_file_path = os.path.join(script_dir, rel_path)
     with open(abs_file_path, "w") as write_file:

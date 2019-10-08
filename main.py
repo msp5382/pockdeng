@@ -1,15 +1,10 @@
-
 import threading
-
 from PockDengServer import startServer
-
 import socket
-
 from WebServ.PockDengWebService import Webserver
 
 t1 = threading.Thread(target=Webserver)
 t1.daemon = True 
-
 
 def app():
     isMultiplayer = 'yes'
@@ -25,8 +20,4 @@ def app():
         else:
             while True:
                 pass
-
-
-
-
 app()

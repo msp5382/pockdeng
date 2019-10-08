@@ -1,3 +1,11 @@
-127.0.0.1 - - [03/Oct/2019 09:41:39] "GET / HTTP/1.1" 304 -
-127.0.0.1 - - [03/Oct/2019 09:42:22] "GET / HTTP/1.1" 304 -
-127.0.0.1 - - [03/Oct/2019 09:42:49] "GET /cards/9C.svg HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2019 17:38:41] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2019 17:38:41] code 404, message File not found
+127.0.0.1 - - [08/Oct/2019 17:38:41] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [08/Oct/2019 17:38:42] "GET /jquery.js HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2019 17:38:42] "GET /cards.js HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2019 17:38:42] code 404, message File not found
+127.0.0.1 - - [08/Oct/2019 17:38:42] "GET /robots.txt HTTP/1.1" 404 -
+127.0.0.1 - - [08/Oct/2019 17:38:42] "GET /bootstrap.css HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2019 17:38:42] "GET /cards/cards.css HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2019 17:38:43] code 404, message File not found
+127.0.0.1 - - [08/Oct/2019 17:38:43] "GET /favicon.ico HTTP/1.1" 404 -

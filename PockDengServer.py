@@ -55,7 +55,7 @@ def drawCard():
 
 JaoTam = [getCard()['1card'],getCard()['2card']]
 
-#print("JAOMUE DAI : ",JaoTam)
+print("JAOMUE DAI : ",JaoTam)
 
 def placeCard(cardJSON):
     # format
@@ -136,6 +136,4 @@ def startServer(server_class=HTTPServer, handler_class=S, port=3500):
     httpd.serve_forever()
     
 
-    #AI JaoMue
-    
 
